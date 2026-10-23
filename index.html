@@ -1,714 +1,517 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Hautlieu Chad Rankings</title>
-
 <style>
-/* =====================================================================
-   1. DESIGN TOKENS  (change colours / radius / easing here)
-   ===================================================================== */
 :root {
-  --bg:      #030816;
-  --text:    #eaf1ff;
-  --muted:   #8fa3cf;
-  --accent:  #5aa9ff;
-  --accent2: #7c8cff;
-  --gold:    #f7cf7a;
-  --good:    #4de0b0;
-  --bad:     #ff6b85;
-  --radius:  20px;
-  --ease:    cubic-bezier(.22, 1, .36, 1);
+  --bg:#030816;--text:#eaf1ff;--muted:#8fa3cf;
+  --accent:#5aa9ff;--accent2:#7c8cff;--gold:#f7cf7a;
+  --good:#4de0b0;--bad:#ff6b85;--radius:20px;
+  --ease:cubic-bezier(.22,1,.36,1);
 }
-
-/* =====================================================================
-   2. BASE
-   ===================================================================== */
-* { box-sizing: border-box; margin: 0; }
-body {
-  background: var(--bg);
-  color: var(--text);
-  font: 15px/1.55 system-ui, "Segoe UI", sans-serif;
-  min-height: 100vh;
+*{box-sizing:border-box;margin:0}
+body{background:var(--bg);color:var(--text);font:15px/1.55 system-ui,"Segoe UI",sans-serif;min-height:100vh}
+a{color:inherit;text-decoration:none}
+.ico{flex:none;vertical-align:-3px}
+h1{font-size:clamp(30px,5vw,46px);letter-spacing:-.02em}
+.eyebrow{color:var(--accent);font-size:12px;letter-spacing:.2em;text-transform:uppercase;font-weight:700}
+.sub{color:var(--muted);margin:6px 0 28px;max-width:620px}
+.muted{color:var(--muted);font-size:13px}
+main{max-width:980px;margin:0 auto;padding:32px 20px 120px}
+.bg{position:fixed;inset:0;z-index:-1;overflow:hidden}
+.bg i{position:absolute;border-radius:50%;filter:blur(70px);opacity:.55;animation:float 22s ease-in-out infinite alternate}
+.bg i:nth-child(1){width:520px;height:520px;background:#1e4fd8;top:-140px;left:-120px}
+.bg i:nth-child(2){width:460px;height:460px;background:#5b3fd8;top:30%;right:-160px;animation-delay:-8s}
+.bg i:nth-child(3){width:420px;height:420px;background:#0f8fd8;bottom:-160px;left:25%;animation-delay:-14s}
+@keyframes float{to{transform:translate(60px,40px) scale(1.15)}}
+.glass{position:relative;isolation:isolate;overflow:hidden;background:linear-gradient(135deg,rgba(255,255,255,.10),rgba(255,255,255,.03));-webkit-backdrop-filter:blur(18px) saturate(170%);backdrop-filter:blur(18px) saturate(170%);border:1px solid rgba(255,255,255,.12);border-radius:var(--radius);box-shadow:inset 0 1px 0 rgba(255,255,255,.28),inset 0 -1px 0 rgba(255,255,255,.05),0 12px 40px rgba(0,5,25,.45);transition:transform .4s var(--ease),border-color .3s,box-shadow .3s}
+.glass::before{content:"";position:absolute;inset:0;z-index:-1;pointer-events:none;background:linear-gradient(115deg,rgba(255,255,255,.16),transparent 38%)}
+.glass::after{content:"";position:absolute;inset:0;z-index:-1;pointer-events:none;opacity:0;background:radial-gradient(260px circle at var(--mx,50%) var(--my,0),rgba(110,170,255,.22),transparent 65%);transition:opacity .3s}
+.glass:hover::after{opacity:1}
+a.glass:hover,.tile:hover{transform:translateY(-4px);border-color:rgba(120,180,255,.5)}
+.ticker{overflow:hidden;white-space:nowrap;font-size:12px;color:var(--muted);padding:7px 0;border-bottom:1px solid rgba(255,255,255,.08)}
+.ticker-track{display:inline-flex;gap:60px;animation:scroll 40s linear infinite}
+@keyframes scroll{to{transform:translateX(-50%)}}
+header{position:sticky;top:10px;z-index:5;margin:12px auto 0;max-width:980px;width:calc(100% - 24px);display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;padding:12px 18px;border-radius:999px}
+.logo{display:flex;align-items:center;gap:10px;font-weight:800;letter-spacing:.14em;font-size:14px}
+.logo small{display:block;font-size:9px;color:var(--accent);letter-spacing:.25em}
+.logo .ico{color:var(--gold)}
+nav{display:flex;gap:4px}
+nav a{display:flex;align-items:center;gap:7px;padding:8px 14px;border-radius:999px;color:var(--muted);font-weight:600;font-size:14px;transition:.25s var(--ease)}
+nav a:hover{color:var(--text);background:rgba(255,255,255,.07)}
+nav a.on{color:var(--text);background:rgba(90,169,255,.22);box-shadow:inset 0 1px 0 rgba(255,255,255,.25)}
+.page{animation:rise .6s var(--ease) both}
+@keyframes rise{from{opacity:0;transform:translateY(18px);filter:blur(6px)}}
+.stagger{animation:rise .6s var(--ease) both;animation-delay:calc(var(--i,0)*45ms)}
+.avatar{position:relative;display:grid;place-items:center;overflow:hidden;width:44px;height:44px;border-radius:50%;background:linear-gradient(135deg,#1d3a7a,#3a2f8a);border:2px solid rgba(90,169,255,.7);font-weight:800}
+.avatar img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.mv{display:inline-flex;align-items:center;gap:3px;font-weight:700;font-size:13px}
+.mv.up{color:var(--good)}.mv.down{color:var(--bad)}.mv.flat{color:var(--muted)}
+.score{font-weight:800;font-size:13px;color:var(--accent);padding:2px 10px;margin-left:8px;border-radius:999px;background:rgba(90,169,255,.14);border:1px solid rgba(90,169,255,.4)}
+button{display:inline-flex;align-items:center;justify-content:center;gap:7px;background:linear-gradient(180deg,#7dbbff,#4b94f0);color:#02122e;border:0;border-radius:12px;padding:10px 18px;font:700 14px/1.4 inherit;cursor:pointer;box-shadow:inset 0 1px 0 rgba(255,255,255,.5),0 6px 18px rgba(60,130,255,.35);transition:transform .2s var(--ease),filter .2s,opacity .2s}
+button:hover:not(:disabled){transform:translateY(-2px);filter:brightness(1.12)}
+button:active:not(:disabled){transform:scale(.96)}
+button:disabled{opacity:.5;cursor:default}
+button.ghost{background:rgba(255,255,255,.07);color:var(--text);border:1px solid rgba(255,255,255,.14);box-shadow:inset 0 1px 0 rgba(255,255,255,.15)}
+.podium{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:30px;align-items:end}
+.podium .glass{padding:22px 12px;text-align:center}
+.podium .c1{order:2;padding-top:38px;border-color:rgba(247,207,122,.55);box-shadow:inset 0 1px 0 rgba(255,255,255,.3),0 0 50px rgba(247,207,122,.18)}
+.podium .c2{order:1}.podium .c3{order:3}
+.podium .avatar{width:68px;height:68px;font-size:24px;margin:0 auto 10px}
+.podium .c1 .avatar{width:88px;height:88px;font-size:30px;border-color:var(--gold)}
+.podium .c1 .score{color:var(--gold);border-color:rgba(247,207,122,.5);background:rgba(247,207,122,.12)}
+.rank-label{font-size:12px;letter-spacing:.15em;color:var(--muted);display:flex;justify-content:center;gap:6px;align-items:center}
+.c1 .rank-label{color:var(--gold)}
+.name{font-weight:700;font-size:18px}
+.title{color:var(--muted);font-size:13px}
+.row{display:flex;align-items:center;gap:14px;padding:12px 18px;margin-bottom:9px;border-radius:16px}
+.row .pos{width:32px;font-weight:800;font-size:18px;color:var(--accent)}
+.row .info{flex:1;min-width:0}
+.row .name{font-size:16px}
+.back{display:inline-flex;align-items:center;gap:6px;color:var(--accent);font-weight:600;margin-bottom:14px}
+.profile{text-align:center;padding:36px 24px}
+.profile .avatar{width:116px;height:116px;font-size:42px;margin:0 auto 14px;border-color:var(--gold)}
+.big-score{font-size:58px;font-weight:800;line-height:1;margin-top:16px}
+.big-score span{font-size:18px;color:var(--muted)}
+.meter{height:8px;max-width:320px;margin:12px auto 26px;background:rgba(255,255,255,.1);border-radius:8px;overflow:hidden}
+.meter i{display:block;height:100%;background:linear-gradient(90deg,var(--accent),var(--gold));border-radius:8px;animation:fill 1.2s .2s var(--ease) both}
+@keyframes fill{from{width:0}}
+.profile h3{text-align:left;color:var(--accent);font-size:12px;letter-spacing:.2em;text-transform:uppercase;margin-bottom:6px}
+.desc{text-align:left;color:#c9d5f2;white-space:pre-wrap;margin-bottom:22px}
+.news-card{padding:22px;margin-bottom:18px}
+.news-card h2{margin:4px 0 8px}
+.news-card p{color:#c9d5f2;white-space:pre-wrap}
+.news-card img{width:100%;max-height:320px;object-fit:cover;border-radius:14px;margin-top:14px}
+.tiles{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:14px}
+.tile{padding:20px 14px;text-align:center}
+.tile .avatar{width:86px;height:86px;font-size:30px;margin:0 auto 10px}
+.tile .name{display:block;font-size:16px}
+.vote-btns{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:14px}
+.vote-btns button{padding:10px 6px}
+.vote-btns .picked-yes{background:linear-gradient(180deg,#7bf0c8,#2fc994);opacity:1!important}
+.vote-btns .picked-no{background:linear-gradient(180deg,#ff93a8,#ee4d6c);opacity:1!important}
+.tile .status{margin-top:10px;font-size:12px;min-height:18px;color:var(--muted)}
+.tile.voted{animation:pop .5s var(--ease)}
+@keyframes pop{40%{transform:scale(1.04)}}
+#adminbar{position:fixed;bottom:16px;left:50%;transform:translateX(-50%);z-index:9;display:flex;gap:8px;flex-wrap:wrap;justify-content:center;padding:10px;border-radius:22px;max-width:94vw}
+#adminbar:empty{display:none}
+dialog{width:min(720px,94vw);max-height:88vh;overflow:auto;padding:24px;color:var(--text);background:rgba(10,20,48,.92);-webkit-backdrop-filter:blur(26px) saturate(170%);backdrop-filter:blur(26px) saturate(170%);border:1px solid rgba(255,255,255,.15);border-radius:24px;box-shadow:inset 0 1px 0 rgba(255,255,255,.25),0 30px 80px rgba(0,0,0,.6);margin:auto}
+dialog[open]{animation:dialog-in .45s var(--ease)}
+dialog::backdrop{background:rgba(2,6,20,.6);backdrop-filter:blur(4px)}
+@keyframes dialog-in{from{opacity:0;transform:translateY(20px) scale(.96);filter:blur(8px)}}
+input,textarea{width:100%;padding:9px 12px;font:inherit;color:var(--text);background:rgba(0,0,10,.35);border:1px solid rgba(255,255,255,.14);border-radius:10px;transition:border-color .2s,box-shadow .2s}
+input:focus,textarea:focus{outline:0;border-color:var(--accent);box-shadow:0 0 0 3px rgba(90,169,255,.2)}
+label{display:block;color:var(--muted);font-size:12px;margin:12px 0 4px}
+.editor-card{padding:14px;margin-bottom:10px}
+.editor-card input,.editor-card textarea{margin-bottom:6px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+.grid3{display:grid;grid-template-columns:90px 90px 1fr;gap:6px}
+.editor-foot{display:flex;justify-content:space-between;align-items:center}
+.dialog-actions{display:flex;gap:8px;justify-content:flex-end;margin-top:18px}
+footer{text-align:center;color:var(--muted);font-size:12px;padding:30px}
+@media(max-width:640px){
+  .podium{grid-template-columns:1fr}
+  .podium .c1,.podium .c2,.podium .c3{order:0}
+  header{border-radius:24px}
+  .grid3{grid-template-columns:1fr 1fr}
+  .grid3 input:last-child{grid-column:1/-1}
 }
-a { color: inherit; text-decoration: none; }
-.ico { flex: none; vertical-align: -3px; }
-h1 { font-size: clamp(30px, 5vw, 46px); letter-spacing: -.02em; }
-.eyebrow { color: var(--accent); font-size: 12px; letter-spacing: .2em; text-transform: uppercase; font-weight: 700; }
-.sub   { color: var(--muted); margin: 6px 0 28px; max-width: 620px; }
-.muted { color: var(--muted); font-size: 13px; }
-main   { max-width: 980px; margin: 0 auto; padding: 32px 20px 120px; }
-
-/* =====================================================================
-   3. BACKGROUND  (floating liquid orbs)
-   ===================================================================== */
-.bg { position: fixed; inset: 0; z-index: -1; overflow: hidden; }
-.bg i {
-  position: absolute; border-radius: 50%;
-  filter: url(#liquid) blur(70px);
-  opacity: .55;
-  animation: float 22s ease-in-out infinite alternate;
-}
-.bg i:nth-child(1) { width: 520px; height: 520px; background: #1e4fd8; top: -140px; left: -120px; }
-.bg i:nth-child(2) { width: 460px; height: 460px; background: #5b3fd8; top: 30%; right: -160px; animation-delay: -8s; }
-.bg i:nth-child(3) { width: 420px; height: 420px; background: #0f8fd8; bottom: -160px; left: 25%; animation-delay: -14s; }
-@keyframes float { to { transform: translate(60px, 40px) scale(1.15); } }
-
-/* =====================================================================
-   4. LIQUID GLASS  (add class="glass" to anything)
-   ===================================================================== */
-.glass {
-  position: relative;
-  isolation: isolate;
-  overflow: hidden;
-  background: linear-gradient(135deg, rgba(255,255,255,.10), rgba(255,255,255,.03));
-  -webkit-backdrop-filter: blur(18px) saturate(170%);
-          backdrop-filter: blur(18px) saturate(170%);
-  border: 1px solid rgba(255,255,255,.12);
-  border-radius: var(--radius);
-  box-shadow:
-    inset 0 1px 0 rgba(255,255,255,.28),
-    inset 0 -1px 0 rgba(255,255,255,.05),
-    0 12px 40px rgba(0,5,25,.45);
-  transition: transform .4s var(--ease), border-color .3s, box-shadow .3s;
-}
-/* top-left specular sheen */
-.glass::before {
-  content: ""; position: absolute; inset: 0; z-index: -1; pointer-events: none;
-  background: linear-gradient(115deg, rgba(255,255,255,.16), transparent 38%);
-}
-/* cursor-following light */
-.glass::after {
-  content: ""; position: absolute; inset: 0; z-index: -1; pointer-events: none; opacity: 0;
-  background: radial-gradient(260px circle at var(--mx, 50%) var(--my, 0), rgba(110,170,255,.22), transparent 65%);
-  transition: opacity .3s;
-}
-.glass:hover::after { opacity: 1; }
-a.glass:hover, .tile:hover { transform: translateY(-4px); border-color: rgba(120,180,255,.5); }
-
-/* =====================================================================
-   5. HEADER + TICKER
-   ===================================================================== */
-.ticker { overflow: hidden; white-space: nowrap; font-size: 12px; color: var(--muted); padding: 7px 0; border-bottom: 1px solid rgba(255,255,255,.08); }
-.ticker-track { display: inline-flex; gap: 60px; animation: scroll 40s linear infinite; }
-@keyframes scroll { to { transform: translateX(-50%); } }
-
-header {
-  position: sticky; top: 10px; z-index: 5;
-  margin: 12px auto 0; max-width: 980px; width: calc(100% - 24px);
-  display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap;
-  padding: 12px 18px; border-radius: 999px;
-}
-.logo { display: flex; align-items: center; gap: 10px; font-weight: 800; letter-spacing: .14em; font-size: 14px; }
-.logo small { display: block; font-size: 9px; color: var(--accent); letter-spacing: .25em; }
-.logo .ico { color: var(--gold); }
-nav { display: flex; gap: 4px; }
-nav a {
-  display: flex; align-items: center; gap: 7px;
-  padding: 8px 14px; border-radius: 999px;
-  color: var(--muted); font-weight: 600; font-size: 14px;
-  transition: .25s var(--ease);
-}
-nav a:hover   { color: var(--text); background: rgba(255,255,255,.07); }
-nav a.on      { color: var(--text); background: rgba(90,169,255,.22); box-shadow: inset 0 1px 0 rgba(255,255,255,.25); }
-
-/* =====================================================================
-   6. SHARED ANIMATION + COMPONENTS
-   ===================================================================== */
-.page { animation: rise .6s var(--ease) both; }
-@keyframes rise { from { opacity: 0; transform: translateY(18px); filter: blur(6px); } }
-.stagger { animation: rise .6s var(--ease) both; animation-delay: calc(var(--i, 0) * 45ms); }
-
-.avatar {
-  position: relative; display: grid; place-items: center; overflow: hidden;
-  width: 44px; height: 44px; border-radius: 50%;
-  background: linear-gradient(135deg, #1d3a7a, #3a2f8a);
-  border: 2px solid rgba(90,169,255,.7);
-  font-weight: 800;
-}
-.avatar img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
-
-.mv { display: inline-flex; align-items: center; gap: 3px; font-weight: 700; font-size: 13px; }
-.mv.up { color: var(--good); } .mv.down { color: var(--bad); } .mv.flat { color: var(--muted); }
-.score {
-  font-weight: 800; font-size: 13px; color: var(--accent);
-  padding: 2px 10px; margin-left: 8px; border-radius: 999px;
-  background: rgba(90,169,255,.14); border: 1px solid rgba(90,169,255,.4);
-}
-
-button {
-  display: inline-flex; align-items: center; justify-content: center; gap: 7px;
-  background: linear-gradient(180deg, #7dbbff, #4b94f0);
-  color: #02122e; border: 0; border-radius: 12px; padding: 10px 18px;
-  font: 700 14px/1 inherit; cursor: pointer;
-  box-shadow: inset 0 1px 0 rgba(255,255,255,.5), 0 6px 18px rgba(60,130,255,.35);
-  transition: transform .2s var(--ease), filter .2s, opacity .2s;
-}
-button:hover:not(:disabled)  { transform: translateY(-2px); filter: brightness(1.12); }
-button:active:not(:disabled) { transform: scale(.96); }
-button:disabled { opacity: .5; cursor: default; }
-button.ghost {
-  background: rgba(255,255,255,.07); color: var(--text);
-  border: 1px solid rgba(255,255,255,.14); box-shadow: inset 0 1px 0 rgba(255,255,255,.15);
-}
-
-/* =====================================================================
-   7. RANKINGS
-   ===================================================================== */
-.podium { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-bottom: 30px; align-items: end; }
-.podium .glass   { padding: 22px 12px; text-align: center; }
-.podium .c1      { order: 2; padding-top: 38px; border-color: rgba(247,207,122,.55); box-shadow: inset 0 1px 0 rgba(255,255,255,.3), 0 0 50px rgba(247,207,122,.18); }
-.podium .c2      { order: 1; } .podium .c3 { order: 3; }
-.podium .avatar  { width: 68px; height: 68px; font-size: 24px; margin: 0 auto 10px; }
-.podium .c1 .avatar { width: 88px; height: 88px; font-size: 30px; border-color: var(--gold); }
-.podium .c1 .score  { color: var(--gold); border-color: rgba(247,207,122,.5); background: rgba(247,207,122,.12); }
-.rank-label { font-size: 12px; letter-spacing: .15em; color: var(--muted); display: flex; justify-content: center; gap: 6px; align-items: center; }
-.c1 .rank-label { color: var(--gold); }
-.name  { font-weight: 700; font-size: 18px; }
-.title { color: var(--muted); font-size: 13px; }
-
-.row { display: flex; align-items: center; gap: 14px; padding: 12px 18px; margin-bottom: 9px; border-radius: 16px; }
-.row .pos { width: 32px; font-weight: 800; font-size: 18px; color: var(--accent); }
-.row .info { flex: 1; min-width: 0; }
-.row .name { font-size: 16px; }
-
-/* =====================================================================
-   8. PROFILE
-   ===================================================================== */
-.back { display: inline-flex; align-items: center; gap: 6px; color: var(--accent); font-weight: 600; margin-bottom: 14px; }
-.profile { text-align: center; padding: 36px 24px; }
-.profile .avatar { width: 116px; height: 116px; font-size: 42px; margin: 0 auto 14px; border-color: var(--gold); }
-.big-score { font-size: 58px; font-weight: 800; line-height: 1; margin-top: 16px; }
-.big-score span { font-size: 18px; color: var(--muted); }
-.meter { height: 8px; max-width: 320px; margin: 12px auto 26px; background: rgba(255,255,255,.1); border-radius: 8px; overflow: hidden; }
-.meter i { display: block; height: 100%; background: linear-gradient(90deg, var(--accent), var(--gold)); border-radius: 8px; animation: fill 1.2s .2s var(--ease) both; }
-@keyframes fill { from { width: 0; } }
-.profile h3 { text-align: left; color: var(--accent); font-size: 12px; letter-spacing: .2em; text-transform: uppercase; margin-bottom: 6px; }
-.desc { text-align: left; color: #c9d5f2; white-space: pre-wrap; margin-bottom: 22px; }
-
-/* =====================================================================
-   9. NEWS
-   ===================================================================== */
-.news-card { padding: 22px; margin-bottom: 18px; }
-.news-card h2 { margin: 4px 0 8px; }
-.news-card p  { color: #c9d5f2; white-space: pre-wrap; }
-.news-card img { width: 100%; max-height: 320px; object-fit: cover; border-radius: 14px; margin-top: 14px; }
-
-/* =====================================================================
-   10. VOTE TILES
-   ===================================================================== */
-.tiles { display: grid; grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); gap: 14px; }
-.tile { padding: 20px 14px; text-align: center; }
-.tile .avatar { width: 86px; height: 86px; font-size: 30px; margin: 0 auto 10px; }
-.tile .name { display: block; font-size: 16px; }
-.vote-btns { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 14px; }
-.vote-btns button { padding: 10px 6px; }
-.vote-btns .picked-yes { background: linear-gradient(180deg, #7bf0c8, #2fc994); opacity: 1 !important; }
-.vote-btns .picked-no  { background: linear-gradient(180deg, #ff93a8, #ee4d6c); opacity: 1 !important; }
-.tile .status { margin-top: 10px; font-size: 12px; min-height: 18px; color: var(--muted); }
-.tile.voted { animation: pop .5s var(--ease); }
-@keyframes pop { 40% { transform: scale(1.04); } }
-
-/* =====================================================================
-   11. ADMIN BAR + EDITOR DIALOG
-   ===================================================================== */
-#adminbar {
-  position: fixed; bottom: 16px; left: 50%; transform: translateX(-50%); z-index: 9;
-  display: flex; gap: 8px; flex-wrap: wrap; justify-content: center;
-  padding: 10px; border-radius: 22px; max-width: 94vw;
-}
-#adminbar:empty { display: none; }
-
-dialog {
-  width: min(720px, 94vw); max-height: 88vh; overflow: auto; padding: 24px; color: var(--text);
-  background: rgba(10, 20, 48, .72);
-  -webkit-backdrop-filter: blur(26px) saturate(170%); backdrop-filter: blur(26px) saturate(170%);
-  border: 1px solid rgba(255,255,255,.15); border-radius: 24px;
-  box-shadow: inset 0 1px 0 rgba(255,255,255,.25), 0 30px 80px rgba(0,0,0,.6);
-}
-dialog[open] { animation: dialog-in .45s var(--ease); }
-dialog::backdrop { background: rgba(2,6,20,.6); backdrop-filter: blur(4px); }
-@keyframes dialog-in { from { opacity: 0; transform: translateY(20px) scale(.96); filter: blur(8px); } }
-
-input, textarea {
-  width: 100%; padding: 9px 12px; font: inherit; color: var(--text);
-  background: rgba(0,0,10,.35); border: 1px solid rgba(255,255,255,.14); border-radius: 10px;
-  transition: border-color .2s, box-shadow .2s;
-}
-input:focus, textarea:focus { outline: 0; border-color: var(--accent); box-shadow: 0 0 0 3px rgba(90,169,255,.2); }
-label { display: block; color: var(--muted); font-size: 12px; margin: 12px 0 4px; }
-.editor-card { padding: 14px; margin-bottom: 10px; }
-.editor-card input, .editor-card textarea { margin-bottom: 6px; }
-.grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
-.grid3 { display: grid; grid-template-columns: 90px 90px 1fr; gap: 6px; }
-.editor-foot { display: flex; justify-content: space-between; align-items: center; }
-.dialog-actions { display: flex; gap: 8px; justify-content: flex-end; margin-top: 18px; }
-
-footer { text-align: center; color: var(--muted); font-size: 12px; padding: 30px; }
-
-@media (max-width: 640px) {
-  .podium { grid-template-columns: 1fr; }
-  .podium .c1, .podium .c2, .podium .c3 { order: 0; }
-  header { border-radius: 24px; }
-}
-@media (prefers-reduced-motion: reduce) { * { animation: none !important; transition: none !important; } }
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 </style>
 </head>
-
 <body>
-
-<!-- liquid distortion filter used by the background orbs -->
-<svg width="0" height="0" style="position:absolute" aria-hidden="true">
-  <filter id="liquid">
-    <feTurbulence type="fractalNoise" baseFrequency=".012" numOctaves="2" seed="4" result="n"/>
-    <feDisplacementMap in="SourceGraphic" in2="n" scale="40"/>
-  </filter>
-</svg>
-
 <div class="bg"><i></i><i></i><i></i></div>
 <div class="ticker"><div class="ticker-track" id="ticker"></div></div>
-
 <header class="glass">
   <div class="logo"><span data-icon="trophy" data-size="24"></span><div>HAUTLIEU CHAD RANKINGS<small>OFFICIAL ASSOCIATION</small></div></div>
   <nav>
     <a href="#rankings" data-route="rankings" data-icon="trophy">Rankings</a>
-    <a href="#news"     data-route="news"     data-icon="news">News</a>
-    <a href="#vote"     data-route="vote"     data-icon="vote">Vote</a>
+    <a href="#news" data-route="news" data-icon="news">News</a>
+    <a href="#vote" data-route="vote" data-icon="vote">Vote</a>
   </nav>
 </header>
-
 <main id="app"></main>
 <footer>© Hautlieu Chad Rankings · Standings published every cycle</footer>
 <div id="adminbar" class="glass"></div>
 <dialog id="dlg"></dialog>
 
-<!-- =====================================================================
-     SITE DATA  (this is what "Export site" rewrites; safe to edit by hand)
-     board: n=name t=title m=movement s=score(0-100) desc=description img=photo URL
-     wh:    encrypted webhook (set it from the admin bar, not by hand)
-     ===================================================================== -->
 <script id="data" type="application/json">
 {
   "passHash": null,
   "ticker": "Welcome to Hautlieu Chad Rankings — standings published every cycle",
   "board": [
-    { "n": "Current True Adam",  "t": "Toby", "m": 0, "s": 97, "desc": "Girl Farmer", "img": "https://files.catbox.moe/cqu3lf.jpg" },
-    { "n": "Contender 2",  "t": "Dean", "m": 0, "s": 95, "desc": "Professional Unfunnyman", "img": "https://files.catbox.moe/expnk6.png" },
-    { "n": "Contender 3",  "t": "Adam", "m": 0, "s": 94, "desc": "Nice Guy", "img": "https://files.catbox.moe/3aegtk.jpg" },
-    { "n": "Contender 4",  "t": "Sizu", "m": 0, "s": 92, "desc": "Classic Chad", "img": "https://files.catbox.moe/t8x9cn.jpg" },
-    { "n": "Contender 5",  "t": "Alek", "m": 0, "s": 91, "desc": "True Fouler", "img": "https://files.catbox.moe/5ptud2.jpg" },
-    { "n": "Contender 6",  "t": "Ethan", "m": 0, "s": 90, "desc": "Roblox Studio Prodigy", "img": "https://files.catbox.moe/rayn8o.jpg" },
-    { "n": "Contender 7",  "t": "Charlie", "m": 0, "s": 88, "desc": "Jonification Continuer", "img": "https://files.catbox.moe/pr8rix.jpg" },
-    { "n": "Contender 8",  "t": "Wiktor", "m": 0, "s": 85, "desc": "Mithh?", "img": "https://files.catbox.moe/0bz9eb.jpg" },
-    { "n": "Contender 9",  "t": "Kordian", "m": 0, "s": 80, "desc": "Tuff man", "img": "https://files.catbox.moe/u1ouy0.png" },
-    { "n": "Contender 10", "t": "Samuel", "m": 0, "s": 79, "desc": "Shamus The Third", "img": "https://files.catbox.moe/kzh3l8.jpg" }
+    {"n":"Current True Adam","t":"Toby","m":0,"s":97,"desc":"Girl Farmer","img":"https://files.catbox.moe/cqu3lf.jpg"},
+    {"n":"Contender 2","t":"Dean","m":0,"s":95,"desc":"Professional Unfunnyman","img":"https://files.catbox.moe/expnk6.png"},
+    {"n":"Contender 3","t":"Adam","m":0,"s":94,"desc":"Nice Guy","img":"https://files.catbox.moe/3aegtk.jpg"},
+    {"n":"Contender 4","t":"Sizu","m":0,"s":92,"desc":"Classic Chad","img":"https://files.catbox.moe/t8x9cn.jpg"},
+    {"n":"Contender 5","t":"Alek","m":0,"s":91,"desc":"True Fouler","img":"https://files.catbox.moe/5ptud2.jpg"},
+    {"n":"Contender 6","t":"Ethan","m":0,"s":90,"desc":"Roblox Studio Prodigy","img":"https://files.catbox.moe/rayn8o.jpg"},
+    {"n":"Contender 7","t":"Charlie","m":0,"s":88,"desc":"Jonification Continuer","img":"https://files.catbox.moe/pr8rix.jpg"},
+    {"n":"Contender 8","t":"Wiktor","m":0,"s":85,"desc":"Mithh?","img":"https://files.catbox.moe/0bz9eb.jpg"},
+    {"n":"Contender 9","t":"Kordian","m":0,"s":80,"desc":"Tuff man","img":"https://files.catbox.moe/u1ouy0.png"},
+    {"n":"Contender 10","t":"Samuel","m":0,"s":79,"desc":"Shamus The Third","img":"https://files.catbox.moe/kzh3l8.jpg"}
   ],
-  "news": [
-    { "h": "Welcome to the Rankings", "b": "Breaking news goes here. Use the admin bar to post updates.", "img": "", "d": "2026-10-22" }
+  "news":[
+    {"h":"Welcome to the Rankings","b":"Breaking news goes here. Use the admin bar to post updates.","img":"","d":"2026-10-22"}
   ],
-  "poll": { "id": "p1", "q": "Is this contender a Chad? Cast your verdict on each one." },
-  "wh": null
+  "poll":{"id":"p1","q":"Is this contender a Chad? Cast your verdict on each one."}
 }
 </script>
 
 <script>
-/* =====================================================================
-   1. HELPERS + STATE
-   ===================================================================== */
-const $   = (sel) => document.querySelector(sel);
-const esc = (s) => String(s ?? '').replace(/[&<>"']/g, (c) =>
-  ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
-const uid = () => 'c' + Math.random().toString(36).slice(2, 8);
+const $=sel=>document.querySelector(sel);
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const uid=()=>'c'+Math.random().toString(36).slice(2,8);
+let S=JSON.parse($('#data').textContent);
+let isAdmin=false;
 
-let S = JSON.parse($('#data').textContent);   // the whole site state
-let isAdmin = false;
-
-/** Make sure every contender has an id, a score and a description. */
-const normalise = () => S.board.forEach((p) => {
-  p.id   = p.id || uid();
-  p.s    = p.s ?? 0;
-  p.desc = p.desc ?? '';
+const normalise=()=>S.board.forEach(p=>{
+  p.id=p.id||uid();
+  p.s=p.s??0;
+  p.desc=p.desc??'';
 });
 normalise();
 
-/* =====================================================================
-   2. SVG ICONS  (add new ones to PATHS, then use icon('name'))
-   ===================================================================== */
-const PATHS = {
-  up:       '<path d="M12 19V5M5 12l7-7 7 7"/>',
-  down:     '<path d="M12 5v14M19 12l-7 7-7-7"/>',
-  minus:    '<path d="M5 12h14"/>',
-  plus:     '<path d="M12 5v14M5 12h14"/>',
-  check:    '<path d="M20 6 9 17l-5-5"/>',
-  x:        '<path d="M18 6 6 18M6 6l12 12"/>',
-  back:     '<path d="M19 12H5M12 19l-7-7 7-7"/>',
-  trophy:   '<path d="M8 21h8M12 17v4M7 4h10v5a5 5 0 0 1-10 0zM7 5H4v2a3 3 0 0 0 3 3M17 5h3v2a3 3 0 0 1-3 3"/>',
-  news:     '<path d="M4 5h13v14H6a2 2 0 0 1-2-2zM17 9h3v8a2 2 0 0 1-2 2M8 9h5M8 13h5"/>',
-  vote:     '<path d="m9 11 3 3 8-8M20 12v7a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h9"/>',
+const PATHS={
+  up:'<path d="M12 19V5M5 12l7-7 7 7"/>',
+  down:'<path d="M12 5v14M19 12l-7 7-7-7"/>',
+  minus:'<path d="M5 12h14"/>',
+  plus:'<path d="M12 5v14M5 12h14"/>',
+  check:'<path d="M20 6 9 17l-5-5"/>',
+  x:'<path d="M18 6 6 18M6 6l12 12"/>',
+  back:'<path d="M19 12H5M12 19l-7-7 7-7"/>',
+  trophy:'<path d="M8 21h8M12 17v4M7 4h10v5a5 5 0 0 1-10 0zM7 5H4v2a3 3 0 0 0 3 3M17 5h3v2a3 3 0 0 1-3 3"/>',
+  news:'<path d="M4 5h13v14H6a2 2 0 0 1-2-2zM17 9h3v8a2 2 0 0 1-2 2M8 9h5M8 13h5"/>',
+  vote:'<path d="m9 11 3 3 8-8M20 12v7a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h9"/>',
   megaphone:'<path d="M3 11v2a1 1 0 0 0 1 1h2l5 4V6L6 10H4a1 1 0 0 0-1 1zM16 8a5 5 0 0 1 0 8"/>',
-  link:     '<path d="M10 13a5 5 0 0 0 7 0l3-3a5 5 0 0 0-7-7l-1 1M14 11a5 5 0 0 0-7 0l-3 3a5 5 0 0 0 7 7l1-1"/>',
-  edit:     '<path d="M12 20h9M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"/>',
-  download: '<path d="M12 3v12M7 10l5 5 5-5M5 21h14"/>',
-  lock:     '<rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/>',
+  link:'<path d="M10 13a5 5 0 0 0 7 0l3-3a5 5 0 0 0-7-7l-1 1M14 11a5 5 0 0 0-7 0l-3 3a5 5 0 0 0 7 7l1-1"/>',
+  edit:'<path d="M12 20h9M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"/>',
+  download:'<path d="M12 3v12M7 10l5 5 5-5M5 21h14"/>',
+  lock:'<rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/>'
 };
-const icon = (name, size = 18) =>
-  `<svg class="ico" width="${size}" height="${size}" viewBox="0 0 24 24" fill="none" stroke="currentColor" ` +
-  `stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${PATHS[name]}</svg>`;
+const icon=(name,size=18)=>`<svg class="ico" width="${size}" height="${size}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${PATHS[name]||''}</svg>`;
 
-/* =====================================================================
-   3. ENCRYPTION  (AES-256-GCM for the webhook URL)
-   ===================================================================== */
-const enc = new TextEncoder(), dec = new TextDecoder();
-const toB64   = (buf) => btoa(String.fromCharCode(...new Uint8Array(buf)));
-const fromB64 = (str) => Uint8Array.from(atob(str), (c) => c.charCodeAt(0));
-const sha256  = async (s) => toB64(await crypto.subtle.digest('SHA-256', enc.encode(s)));
+const avatar=p=>`<div class="avatar"><span>${esc((p.n.trim()[0]||'?').toUpperCase())}</span>${p.img?`<img src="${esc(p.img)}" alt="" onerror="this.remove()">`:''}</div>`;
+const movement=m=>m>0?`<span class="mv up">${icon('up',14)}+${m}</span>`:m<0?`<span class="mv down">${icon('down',14)}${m}</span>`:`<span class="mv flat">${icon('minus',14)}</span>`;
 
-async function encryptWebhook(url) {
-  const k  = crypto.getRandomValues(new Uint8Array(32));
-  const iv = crypto.getRandomValues(new Uint8Array(12));
-  const key = await crypto.subtle.importKey('raw', k, 'AES-GCM', false, ['encrypt']);
-  const ct  = await crypto.subtle.encrypt({ name: 'AES-GCM', iv }, key, enc.encode(url));
-  return { k: toB64(k), iv: toB64(iv), ct: toB64(ct) };
-}
-async function decryptWebhook(w) {
-  const key = await crypto.subtle.importKey('raw', fromB64(w.k), 'AES-GCM', false, ['decrypt']);
-  return dec.decode(await crypto.subtle.decrypt({ name: 'AES-GCM', iv: fromB64(w.iv) }, key, fromB64(w.ct)));
-}
-
-/* =====================================================================
-   4. VIEWS  (each returns an HTML string)
-   ===================================================================== */
-const avatar = (p) =>
-  `<div class="avatar"><span>${esc((p.n.trim()[0] || '?').toUpperCase())}</span>` +
-  (p.img ? `<img src="${esc(p.img)}" alt="" onerror="this.remove()">` : '') + `</div>`;
-
-const movement = (m) =>
-  m > 0 ? `<span class="mv up">${icon('up', 14)}+${m}</span>` :
-  m < 0 ? `<span class="mv down">${icon('down', 14)}${m}</span>` :
-          `<span class="mv flat">${icon('minus', 14)}</span>`;
-
-function rankingsView() {
-  const podium = S.board.slice(0, 3).map((p, i) => `
-    <a class="glass c${i + 1} stagger" style="--i:${i}" href="#profile/${p.id}">
+function rankingsView(){
+  const podium=S.board.slice(0,3).map((p,i)=>`
+    <a class="glass c${i+1} stagger" style="--i:${i}" href="#profile/${p.id}">
       ${avatar(p)}
-      <div class="rank-label">${i === 0 ? icon('trophy', 14) : ''}#${i + 1}</div>
+      <div class="rank-label">${i===0?icon('trophy',14):''}#${i+1}</div>
       <div class="name">${esc(p.n)}</div>
       <div class="title">${esc(p.t)}</div>
       ${movement(p.m)}<span class="score">${p.s}</span>
     </a>`).join('');
-
-  const rows = S.board.map((p, i) => `
-    <a class="glass row stagger" style="--i:${i + 3}" href="#profile/${p.id}">
-      <div class="pos">${i + 1}</div>
-      ${avatar(p)}
+  const rows=S.board.map((p,i)=>`
+    <a class="glass row stagger" style="--i:${i+3}" href="#profile/${p.id}">
+      <div class="pos">${i+1}</div>${avatar(p)}
       <div class="info"><div class="name">${esc(p.n)}</div><div class="title">${esc(p.t)}</div></div>
       ${movement(p.m)}<span class="score">${p.s}</span>
     </a>`).join('');
-
-  return `
-    <div class="eyebrow">Chad Ranking Association</div>
+  return `<div class="eyebrow">Chad Ranking Association</div>
     <h1>Hautlieu Chad Rankings</h1>
     <p class="sub">The authoritative standings, reviewed and published every cycle.</p>
     <div class="podium">${podium}</div>
-    <div class="eyebrow" style="margin-bottom:12px">Full Ranking</div>
-    ${rows}`;
+    <div class="eyebrow" style="margin-bottom:12px">Full Ranking</div>${rows}`;
 }
 
-const newsView = () => `
-  <div class="eyebrow">Breaking News</div><h1>News</h1>
-  <p class="sub">Latest from the association.</p>` +
-  S.news.map((n, i) => `
-    <article class="glass news-card stagger" style="--i:${i}">
-      <div class="muted">${esc(n.d)}</div>
-      <h2>${esc(n.h)}</h2>
-      <p>${esc(n.b)}</p>
-      ${n.img ? `<img src="${esc(n.img)}" alt="" onerror="this.remove()">` : ''}
-    </article>`).join('');
+const newsView=()=>`<div class="eyebrow">Breaking News</div><h1>News</h1>
+  <p class="sub">Latest from the association.</p>`+
+  S.news.map((n,i)=>`<article class="glass news-card stagger" style="--i:${i}">
+    <div class="muted">${esc(n.d)}</div><h2>${esc(n.h)}</h2><p>${esc(n.b)}</p>
+    ${n.img?`<img src="${esc(n.img)}" alt="" onerror="this.remove()">`:''}
+  </article>`).join('');
 
-function profileView(id) {
-  const i = S.board.findIndex((p) => p.id === id);
-  if (i < 0) return `<a class="back" href="#rankings">${icon('back')} Rankings</a><h1>Profile not found</h1>`;
-  const p = S.board[i];
-  return `
-    <a class="back" href="#rankings">${icon('back')} Rankings</a>
-    <div class="glass profile">
-      ${avatar(p)}
-      <div class="rank-label">RANK #${i + 1} · ID ${esc(p.id)}</div>
-      <h1>${esc(p.n)}</h1>
-      <div class="title">${esc(p.t)}</div>
+function profileView(id){
+  const i=S.board.findIndex(p=>p.id===id);
+  if(i<0)return `<a class="back" href="#rankings">${icon('back')} Rankings</a><h1>Profile not found</h1>`;
+  const p=S.board[i];
+  return `<a class="back" href="#rankings">${icon('back')} Rankings</a>
+    <div class="glass profile">${avatar(p)}
+      <div class="rank-label">RANK #${i+1} · ID ${esc(p.id)}</div>
+      <h1>${esc(p.n)}</h1><div class="title">${esc(p.t)}</div>
       <div style="margin-top:10px">${movement(p.m)}</div>
       <div class="big-score">${p.s}<span> /100</span></div>
       <div class="meter"><i style="width:${p.s}%"></i></div>
-      <h3>About</h3>
-      <p class="desc">${esc(p.desc) || 'No description yet.'}</p>
+      <h3>About</h3><p class="desc">${esc(p.desc)||'No description yet.'}</p>
       <button class="ghost" data-copy="${p.id}">${icon('link')} Copy profile link</button>
     </div>`;
 }
 
-/* ---- vote tiles: one Chad / Not Chad pair per contender ---- */
-const voteKey = (id) => `v_${S.poll.id}_${id}`;
+const voteKey=id=>`v_${S.poll.id}_${id}`;
 
-function tileHTML(p, i = 0) {
-  const v = localStorage.getItem(voteKey(p.id));            // 'c', 'n' or null
-  const result = v ? `${icon(v === 'c' ? 'check' : 'x', 14)} You voted ${v === 'c' ? 'Chad' : 'Not Chad'}` : '';
-  return `
-    <div class="glass tile stagger" style="--i:${i}" data-id="${p.id}">
-      ${avatar(p)}
-      <a class="name" href="#profile/${p.id}">${esc(p.n)}</a>
-      <div class="title">${esc(p.t)}</div>
-      <div class="vote-btns">
-        <button data-v="c" class="${v === 'c' ? 'picked-yes' : 'ghost'}" ${v ? 'disabled' : ''}>${icon('check', 15)} Chad</button>
-        <button data-v="n" class="${v === 'n' ? 'picked-no'  : 'ghost'}" ${v ? 'disabled' : ''}>${icon('x', 15)} Not Chad</button>
-      </div>
-      <div class="status">${result}</div>
-    </div>`;
+function tileHTML(p,i=0){
+  const v=localStorage.getItem(voteKey(p.id));
+  const result=v?`${icon(v==='c'?'check':'x',14)} You voted ${v==='c'?'Chad':'Not Chad'}`:'';
+  return `<div class="glass tile stagger" style="--i:${i}" data-id="${p.id}">
+    ${avatar(p)}
+    <a class="name" href="#profile/${p.id}">${esc(p.n)}</a>
+    <div class="title">${esc(p.t)}</div>
+    <div class="vote-btns">
+      <button data-v="c" class="${v==='c'?'picked-yes':'ghost'}" ${v?'disabled':''}>${icon('check',15)} Chad</button>
+      <button data-v="n" class="${v==='n'?'picked-no':'ghost'}" ${v?'disabled':''}>${icon('x',15)} Not Chad</button>
+    </div>
+    <div class="status">${result}</div>
+  </div>`;
 }
-const voteView = () => `
-  <div class="eyebrow">Community Vote</div><h1>Vote</h1>
+
+const voteView=()=>`<div class="eyebrow">Community Vote</div><h1>Vote</h1>
   <p class="sub">${esc(S.poll.q)}</p>
   <div class="tiles">${S.board.map(tileHTML).join('')}</div>`;
 
-/* =====================================================================
-   5. ROUTER + TICKER
-   ===================================================================== */
-const VIEWS = { rankings: rankingsView, news: newsView, vote: voteView };
+const VIEWS={rankings:rankingsView,news:newsView,vote:voteView};
 
-function route() {
-  const hash = location.hash.slice(1) || 'rankings';
-  const profile = hash.match(/^profile\/(.+)$/);
-  const key = profile ? 'rankings' : (VIEWS[hash] ? hash : 'rankings');
-
-  document.querySelectorAll('nav a').forEach((a) => a.classList.toggle('on', a.dataset.route === key));
-  $('#app').innerHTML = `<section class="page">${profile ? profileView(profile[1]) : VIEWS[key]()}</section>`;
-  if (!isAdmin || profile) scrollTo(0, 0);
-
-  const item = `<span>${icon('megaphone', 14)} ${esc(S.ticker)}</span>`;
-  $('#ticker').innerHTML = item.repeat(6);               // 6 copies + translateX(-50%) = seamless loop
+function route(){
+  const hash=location.hash.slice(1)||'rankings';
+  const profile=hash.match(/^profile\/(.+)$/);
+  const key=profile?'rankings':(VIEWS[hash]?hash:'rankings');
+  document.querySelectorAll('nav a').forEach(a=>a.classList.toggle('on',a.dataset.route===key));
+  $('#app').innerHTML=`<section class="page">${profile?profileView(profile[1]):VIEWS[key]()}</section>`;
+  if(!isAdmin||profile)scrollTo(0,0);
+  const item=`<span>${icon('megaphone',14)} ${esc(S.ticker)}</span>`;
+  $('#ticker').innerHTML=item.repeat(6);
 }
 
-/* =====================================================================
-   6. VOTING + PROFILE-LINK CLICKS  (event delegation on #app)
-   ===================================================================== */
-$('#app').addEventListener('click', async (e) => {
-  /* copy profile link */
-  const copyBtn = e.target.closest('[data-copy]');
-  if (copyBtn) {
-    navigator.clipboard.writeText(location.href.split('#')[0] + '#profile/' + copyBtn.dataset.copy);
-    copyBtn.innerHTML = `${icon('check')} Copied`;
+/* Voting sends each vote to the Vercel API, which uses the secret
+   DISCORD_WEBHOOK_URL environment variable on the server. */
+$('#app').addEventListener('click',async e=>{
+  const copyBtn=e.target.closest('[data-copy]');
+  if(copyBtn){
+    try{
+      await navigator.clipboard.writeText(location.href.split('#')[0]+'#profile/'+copyBtn.dataset.copy);
+      copyBtn.innerHTML=`${icon('check')} Copied`;
+    }catch{
+      prompt('Copy this profile link:',location.href.split('#')[0]+'#profile/'+copyBtn.dataset.copy);
+    }
     return;
   }
 
-  /* Chad / Not Chad */
-  const btn = e.target.closest('.vote-btns button');
-  if (!btn) return;
-  const tile   = btn.closest('.tile');
-  const p      = S.board.find((x) => x.id === tile.dataset.id);
-  const status = tile.querySelector('.status');
-  const isChad = btn.dataset.v === 'c';
+  const btn=e.target.closest('.vote-btns button');
+  if(!btn)return;
 
-  if (!S.wh) { status.textContent = 'Voting is not configured yet.'; return; }
+  const tile=btn.closest('.tile');
+  const p=S.board.find(x=>x.id===tile.dataset.id);
+  if(!p)return;
 
-  const buttons = tile.querySelectorAll('button');
-  buttons.forEach((b) => (b.disabled = true));
-  status.textContent = 'Sending…';
+  const status=tile.querySelector('.status');
+  const isChad=btn.dataset.v==='c';
+  const buttons=tile.querySelectorAll('button');
 
-  try {
-    const url = await decryptWebhook(S.wh);
-    let voter = localStorage.getItem('voter');
-    if (!voter) { voter = crypto.randomUUID(); localStorage.setItem('voter', voter); }
+  // Stop repeat submissions from this browser for this contender.
+  if(localStorage.getItem(voteKey(p.id))){
+    status.textContent='You have already voted on this contender.';
+    buttons.forEach(b=>b.disabled=true);
+    return;
+  }
 
-    const res = await fetch(url, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        username: 'HCR Votes',
-        embeds: [{
-          title: 'New vote',
-          color: isChad ? 5099696 : 16739199,
-          fields: [
-            { name: 'Contender', value: `${p.n} (ID ${p.id})` },
-            { name: 'Verdict',   value: isChad ? 'Chad' : 'Not Chad' },
-            { name: 'Poll',      value: S.poll.q },
-            { name: 'Voter ID',  value: voter.slice(0, 8) },
-          ],
-          timestamp: new Date().toISOString(),
-        }],
-      }),
+  buttons.forEach(b=>b.disabled=true);
+  status.textContent='Sending vote…';
+
+  try{
+    let voter=localStorage.getItem('voter');
+    if(!voter){
+      voter=crypto.randomUUID();
+      localStorage.setItem('voter',voter);
+    }
+
+    const res=await fetch('/api/vote',{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({
+        contender:p.n,
+        verdict:isChad?'Chad':'Not Chad',
+        poll:S.poll.q,
+        voterId:voter
+      })
     });
-    if (!res.ok) throw new Error('webhook rejected');
 
-    localStorage.setItem(voteKey(p.id), btn.dataset.v);
-    tile.outerHTML = tileHTML(p);
-    $(`.tile[data-id="${p.id}"]`).classList.add('voted');
-  } catch {
-    status.textContent = 'Could not send vote. Try again.';
-    buttons.forEach((b) => (b.disabled = false));
+    if(!res.ok){
+      const errorData=await res.json().catch(()=>({}));
+      throw new Error(errorData.error||'Vote submission failed');
+    }
+
+    localStorage.setItem(voteKey(p.id),btn.dataset.v);
+    tile.outerHTML=tileHTML(p);
+    const updatedTile=$(`.tile[data-id="${p.id}"]`);
+    if(updatedTile)updatedTile.classList.add('voted');
+  }catch(error){
+    console.error('Vote failed:',error);
+    status.textContent='Could not send vote. Try again.';
+    buttons.forEach(b=>b.disabled=false);
   }
 });
 
-/* =====================================================================
-   7. ADMIN  (open the page with ?admin on the end of the URL)
-   ===================================================================== */
-const dlg = $('#dlg');
-const saveDraft = () => localStorage.setItem('hcr_draft', JSON.stringify(S));
+/* Admin editor */
+const dlg=$('#dlg');
+const saveDraft=()=>localStorage.setItem('hcr_draft',JSON.stringify(S));
 
-/** Open the editor dialog with some HTML; onSave runs when "Save" is pressed. */
-function openDialog(html, onSave) {
-  dlg.innerHTML = html + `
-    <div class="dialog-actions">
-      <button class="ghost" id="cancel">Cancel</button>
-      <button id="save">${icon('check')} Save</button>
-    </div>`;
+function openDialog(html,onSave){
+  dlg.innerHTML=html+`<div class="dialog-actions">
+    <button class="ghost" id="cancel">Cancel</button>
+    <button id="save">${icon('check')} Save</button></div>`;
   dlg.showModal();
-  $('#cancel').onclick = () => dlg.close();
-  $('#save').onclick = async () => { await onSave(); saveDraft(); dlg.close(); route(); };
+  $('#cancel').onclick=()=>dlg.close();
+  $('#save').onclick=async()=>{
+    await onSave();
+    saveDraft();
+    dlg.close();
+    route();
+  };
 }
 
-/* ---- leaderboard editor ---- */
-const editorRow = (p) => {
-  p = p || { id: uid(), n: '', t: '', m: 0, s: 0, desc: '', img: '' };
-  return `
-    <div class="glass editor-card" data-id="${p.id}">
-      <div class="grid2">
-        <input placeholder="Name"  value="${esc(p.n)}">
-        <input placeholder="Title" value="${esc(p.t)}">
-      </div>
-      <div class="grid3">
-        <input type="number" placeholder="Move"  title="Movement (+ up / - down)" value="${p.m}">
-        <input type="number" placeholder="Score" title="Score out of 100" min="0" max="100" value="${p.s}">
-        <input placeholder="Image URL (optional)" value="${esc(p.img)}">
-      </div>
-      <textarea rows="3" placeholder="Full description">${esc(p.desc)}</textarea>
-      <div class="editor-foot">
-        <span class="muted">ID: ${p.id}</span>
-        <span>
-          <button class="ghost" onclick="moveRow(this,-1)">${icon('up', 15)}</button>
-          <button class="ghost" onclick="moveRow(this,1)">${icon('down', 15)}</button>
-          <button class="ghost" onclick="this.closest('.editor-card').remove()">${icon('x', 15)}</button>
-        </span>
-      </div>
-    </div>`;
-};
-const moveRow = (btn, dir) => {
-  const row = btn.closest('.editor-card');
-  const other = dir < 0 ? row.previousElementSibling : row.nextElementSibling;
-  if (other) dir < 0 ? other.before(row) : other.after(row);
+const editorRow=p=>{
+  p=p||{id:uid(),n:'',t:'',m:0,s:0,desc:'',img:''};
+  return `<div class="glass editor-card" data-id="${p.id}">
+    <div class="grid2">
+      <input placeholder="Name" value="${esc(p.n)}">
+      <input placeholder="Title" value="${esc(p.t)}">
+    </div>
+    <div class="grid3">
+      <input type="number" placeholder="Move" title="Movement (+ up / - down)" value="${p.m}">
+      <input type="number" placeholder="Score" title="Score out of 100" min="0" max="100" value="${p.s}">
+      <input placeholder="Image URL (optional)" value="${esc(p.img)}">
+    </div>
+    <textarea rows="3" placeholder="Full description">${esc(p.desc)}</textarea>
+    <div class="editor-foot"><span class="muted">ID: ${p.id}</span>
+      <span>
+        <button class="ghost" onclick="moveRow(this,-1)">${icon('up',15)}</button>
+        <button class="ghost" onclick="moveRow(this,1)">${icon('down',15)}</button>
+        <button class="ghost" onclick="this.closest('.editor-card').remove()">${icon('x',15)}</button>
+      </span>
+    </div>
+  </div>`;
 };
 
-const editBoard = () => openDialog(`
+const moveRow=(btn,dir)=>{
+  const row=btn.closest('.editor-card');
+  const other=dir<0?row.previousElementSibling:row.nextElementSibling;
+  if(other)dir<0?other.before(row):other.after(row);
+};
+
+const editBoard=()=>openDialog(`
   <h2>Leaderboard</h2>
   <p class="muted">Order = rank. Movement: + up, - down. Score is out of 100. IDs never change, so profile links keep working.</p>
-  <div id="rows">${S.board.map((p) => editorRow(p)).join('')}</div>
-  <button class="ghost" onclick="rows.insertAdjacentHTML('beforeend', editorRow())">${icon('plus')} Add contender</button>`,
-  () => {
-    S.board = [...document.querySelectorAll('#rows .editor-card')].map((card) => {
-      const f = card.querySelectorAll('input');
+  <div id="rows">${S.board.map(editorRow).join('')}</div>
+  <button class="ghost" onclick="document.querySelector('#rows').insertAdjacentHTML('beforeend',editorRow())">${icon('plus')} Add contender</button>`,
+  ()=>{
+    S.board=[...document.querySelectorAll('#rows .editor-card')].map(card=>{
+      const f=card.querySelectorAll('input');
       return {
-        id:   card.dataset.id,
-        n:    f[0].value || 'Unnamed',
-        t:    f[1].value,
-        m:    +f[2].value || 0,
-        s:    Math.max(0, Math.min(100, +f[3].value || 0)),
-        img:  f[4].value,
-        desc: card.querySelector('textarea').value,
+        id:card.dataset.id,
+        n:f[0].value||'Unnamed',
+        t:f[1].value,
+        m:+f[2].value||0,
+        s:Math.max(0,Math.min(100,+f[3].value||0)),
+        img:f[4].value,
+        desc:card.querySelector('textarea').value
       };
     });
   });
 
-/* ---- news editor ---- */
-const newsRow = (n) => `
-  <div class="glass editor-card">
-    <input placeholder="Headline" value="${esc(n.h)}">
-    <textarea rows="3" placeholder="Body">${esc(n.b)}</textarea>
-    <input placeholder="Image URL (optional)" value="${esc(n.img)}">
-    <input value="${esc(n.d)}">
-    <button class="ghost" onclick="this.closest('.editor-card').remove()">${icon('x', 15)} Delete</button>
-  </div>`;
+const newsRow=n=>`<div class="glass editor-card">
+  <input placeholder="Headline" value="${esc(n.h)}">
+  <textarea rows="3" placeholder="Body">${esc(n.b)}</textarea>
+  <input placeholder="Image URL (optional)" value="${esc(n.img)}">
+  <input placeholder="Date" value="${esc(n.d)}">
+  <button class="ghost" onclick="this.closest('.editor-card').remove()">${icon('x',15)} Delete</button>
+</div>`;
 
-const editNews = () => openDialog(`
+const editNews=()=>openDialog(`
   <h2>News</h2>
-  <button class="ghost" onclick="newsList.insertAdjacentHTML('afterbegin', newsRow({h:'',b:'',img:'',d:new Date().toISOString().slice(0,10)}))">${icon('plus')} New post</button>
+  <button class="ghost" onclick="document.querySelector('#newsList').insertAdjacentHTML('afterbegin',newsRow({h:'',b:'',img:'',d:new Date().toISOString().slice(0,10)}))">${icon('plus')} New post</button>
   <div id="newsList" style="margin-top:12px">${S.news.map(newsRow).join('')}</div>
   <label>Ticker text</label><input id="tickerInput" value="${esc(S.ticker)}">`,
-  () => {
-    S.news = [...document.querySelectorAll('#newsList .editor-card')]
-      .map((card) => {
-        const f = card.querySelectorAll('input, textarea');
-        return { h: f[0].value, b: f[1].value, img: f[2].value, d: f[3].value };
-      })
-      .filter((n) => n.h || n.b);
-    S.ticker = $('#tickerInput').value;
+  ()=>{
+    S.news=[...document.querySelectorAll('#newsList .editor-card')].map(card=>{
+      const f=card.querySelectorAll('input,textarea');
+      return {h:f[0].value,b:f[1].value,img:f[2].value,d:f[3].value};
+    }).filter(n=>n.h||n.b);
+    S.ticker=$('#tickerInput').value;
   });
 
-/* ---- vote + webhook editors ---- */
-const editVote = () => openDialog(`
+const editVote=()=>openDialog(`
   <h2>Vote section</h2>
   <p class="muted">Every contender on the leaderboard appears as a tile with Chad / Not Chad buttons.</p>
   <label>Heading text</label><input id="pollQ" value="${esc(S.poll.q)}">
-  <label style="display:flex;gap:8px;align-items:center;margin-top:14px"><input type="checkbox" id="pollReset" style="width:auto"> Reset everyone's votes (lets people vote again)</label>`,
-  () => { S.poll = { id: $('#pollReset').checked ? 'p' + Date.now() : S.poll.id, q: $('#pollQ').value }; });
+  <label style="display:flex;gap:8px;align-items:center;margin-top:14px">
+    <input type="checkbox" id="pollReset" style="width:auto"> Reset votes on this browser's next visit
+  </label>`,
+  ()=>{
+    S.poll={id:$('#pollReset').checked?'p'+Date.now():S.poll.id,q:$('#pollQ').value};
+  });
 
-const editWebhook = () => openDialog(`
-  <h2>Webhook</h2>
-  <p class="muted">Paste your Discord webhook URL. It is stored AES-256-GCM encrypted, never as plain text. ${S.wh ? 'A webhook is currently set.' : ''}</p>
-  <label>Webhook URL</label><input id="whUrl" placeholder="https://discord.com/api/webhooks/1562873286080204972/Ovr5c0X1Pt5JDS1RjEatn0lJjPGygUuzi_-aq6voGHEIH1TJz9_kyDi3pwTX3rk1PI0l">`,
-  async () => { const u = $('#whUrl').value.trim(); if (u) S.wh = await encryptWebhook(u); });
-
-/* ---- export: download this page with the current data baked in ---- */
-function exportSite() {
-  const clone = document.documentElement.cloneNode(true);
-  clone.querySelector('#data').textContent = JSON.stringify(S, null, 2).replace(/</g, '\\u003c');
-  ['#app', '#adminbar', '#dlg', '#ticker'].forEach((s) => (clone.querySelector(s).innerHTML = ''));
-  document.querySelectorAll('[data-icon]').length; // (icons are re-added on load)
-  clone.querySelectorAll('[data-icon]').forEach((el) => el.querySelector(':scope > .ico')?.remove());
-  const a = document.createElement('a');
-  a.href = URL.createObjectURL(new Blob(['<!DOCTYPE html>\n' + clone.outerHTML], { type: 'text/html' }));
-  a.download = 'hautlieuchadrankings.html';
+function exportSite(){
+  const clone=document.documentElement.cloneNode(true);
+  clone.querySelector('#data').textContent=JSON.stringify(S,null,2).replace(/</g,'\\u003c');
+  ['#app','#adminbar','#dlg','#ticker'].forEach(s=>{
+    const el=clone.querySelector(s);
+    if(el)el.innerHTML='';
+  });
+  clone.querySelectorAll('[data-icon]').forEach(el=>el.querySelector(':scope > .ico')?.remove());
+  const a=document.createElement('a');
+  a.href=URL.createObjectURL(new Blob(['<!DOCTYPE html>\n'+clone.outerHTML],{type:'text/html'}));
+  a.download='hautlieuchadrankings.html';
   a.click();
+  URL.revokeObjectURL(a.href);
 }
 
-async function initAdmin() {
-  if (S.passHash) {
-    const pass = prompt('Admin passcode');
-    if (!pass || (await sha256(pass)) !== S.passHash) return;
-  } else {
-    const pass = prompt('First run: set an admin passcode');
-    if (!pass) return;
-    S.passHash = await sha256(pass);
-  }
-  const draft = localStorage.getItem('hcr_draft');
-  if (draft) { const d = JSON.parse(draft); d.passHash = S.passHash; S = d; normalise(); }
+async function sha256(s){
+  const data=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(s));
+  return btoa(String.fromCharCode(...new Uint8Array(data)));
+}
 
-  isAdmin = true;
+async function initAdmin(){
+  if(S.passHash){
+    const pass=prompt('Admin passcode');
+    if(!pass||(await sha256(pass))!==S.passHash)return;
+  }else{
+    const pass=prompt('First run: set an admin passcode');
+    if(!pass)return;
+    S.passHash=await sha256(pass);
+  }
+
+  const draft=localStorage.getItem('hcr_draft');
+  if(draft){
+    try{
+      const d=JSON.parse(draft);
+      d.passHash=S.passHash;
+      S=d;
+      normalise();
+    }catch(error){
+      console.error('Could not load admin draft:',error);
+    }
+  }
+
+  isAdmin=true;
   saveDraft();
-  $('#adminbar').innerHTML = `
+  $('#adminbar').innerHTML=`
     <button onclick="editBoard()">${icon('trophy')} Leaderboard</button>
     <button onclick="editNews()">${icon('news')} News</button>
     <button onclick="editVote()">${icon('vote')} Vote</button>
-    <button onclick="editWebhook()">${icon('lock')} Webhook</button>
     <button class="ghost" onclick="exportSite()">${icon('download')} Export site</button>`;
   route();
 }
 
-/* =====================================================================
-   8. GLOBAL EFFECTS + BOOT
-   ===================================================================== */
-/* feeds the cursor-following light on every .glass element */
-document.addEventListener('pointermove', (e) => {
-  const g = e.target.closest?.('.glass');
-  if (!g) return;
-  const r = g.getBoundingClientRect();
-  g.style.setProperty('--mx', e.clientX - r.left + 'px');
-  g.style.setProperty('--my', e.clientY - r.top + 'px');
+document.addEventListener('pointermove',e=>{
+  const g=e.target.closest?.('.glass');
+  if(!g)return;
+  const r=g.getBoundingClientRect();
+  g.style.setProperty('--mx',e.clientX-r.left+'px');
+  g.style.setProperty('--my',e.clientY-r.top+'px');
 });
 
-document.querySelectorAll('[data-icon]').forEach((el) =>
-  el.insertAdjacentHTML('afterbegin', icon(el.dataset.icon, +el.dataset.size || 18)));
+document.querySelectorAll('[data-icon]').forEach(el=>{
+  el.insertAdjacentHTML('afterbegin',icon(el.dataset.icon,+el.dataset.size||18));
+});
 
-addEventListener('hashchange', route);
+addEventListener('hashchange',route);
 route();
-if (/[?&]admin/.test(location.search)) initAdmin();
+
+if(/[?&]admin(?:[=&]|$)/.test(location.search))initAdmin();
 </script>
 </body>
 </html>
