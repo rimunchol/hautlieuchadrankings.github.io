@@ -54,7 +54,7 @@ nav a.on{color:var(--text);border-color:var(--text)}
 .news-card{padding:20px 0;border-bottom:1px solid var(--line)}
 .news-card h2{font-size:20px;margin:4px 0 6px}
 .news-card p{color:#c3cde8;white-space:pre-wrap}
-.news-card img{width:100%;max-height:340px;object-fit:cover;border-radius:6px;margin-top:14px}
+.news-card img,.news-card video{display:block;width:100%;max-height:340px;object-fit:cover;border-radius:6px;margin-top:14px;background:#000}
 .tiles{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:12px}
 .tile{padding:18px 14px;text-align:center;border:1px solid var(--line);border-radius:8px}
 .tile .avatar{width:80px;height:80px;font-size:28px;margin:0 auto 10px}
@@ -99,7 +99,7 @@ footer{text-align:center;color:var(--muted);font-size:12px;padding:30px}
   </nav>
 </div></header>
 <main id="app"></main>
-<footer>© Hautlieu Chad Rankings</footer>
+<footer>Hautlieu Chad Rankings (everyone here gives consent)</footer>
 <div id="adminbar"></div>
 <dialog id="dlg"></dialog>
 
@@ -108,19 +108,20 @@ footer{text-align:center;color:var(--muted);font-size:12px;padding:30px}
   "passHash": null,
   "ticker": "Welcome to Hautlieu Chad Rankings — standings published every cycle",
   "board": [
-    {"id":"dean","n":"Dean","t":"Current True Adam","m":1,"s":98,"desc":"Professional Unfunnyman","img":"https://files.catbox.moe/expnk6.png"},
+    {"id":"ethan","n":"Ethan","t":"Roblox Studio Prodigy","m":5,"s":100,"desc":"Roblox Studio Prodigy","img":"https://files.catbox.moe/rayn8o.jpg"},
+    {"id":"dean","n":"Dean","t":"Current True Adam","m":-1,"s":98,"desc":"Professional Unfunnyman","img":"https://files.catbox.moe/expnk6.png"},
     {"id":"toby","n":"Toby","t":"Girl Farmer","m":-1,"s":95,"desc":"Girl Farmer","img":"https://files.catbox.moe/cqu3lf.jpg"},
-    {"id":"adam","n":"Adam","t":"Nice Guy","m":0,"s":94,"desc":"Nice Guy","img":"https://files.catbox.moe/3aegtk.jpg"},
-    {"id":"sizu","n":"Sizu","t":"Classic Chad","m":0,"s":92,"desc":"Classic Chad","img":"https://files.catbox.moe/t8x9cn.jpg"},
-    {"id":"alek","n":"Alek","t":"True Fouler","m":0,"s":91,"desc":"True Fouler","img":"https://files.catbox.moe/5ptud2.jpg"},
-    {"id":"ethan","n":"Ethan","t":"Roblox Studio Prodigy","m":0,"s":90,"desc":"Roblox Studio Prodigy","img":"https://files.catbox.moe/rayn8o.jpg"},
-    {"id":"charlie","n":"Charlie","t":"Jonification Continuer","m":0,"s":88,"desc":"Jonification Continuer","img":"https://files.catbox.moe/pr8rix.jpg"},
-    {"id":"kordian","n":"Kordian","t":"Tuff Man","m":0,"s":80,"desc":"Tuff man","img":"https://files.catbox.moe/u1ouy0.png"},
-    {"id":"samuel","n":"Samuel","t":"Shamus The Third","m":0,"s":79,"desc":"Shamus The Third","img":"https://files.catbox.moe/kzh3l8.jpg"},
-    {"id":"ellis","n":"Ellis","t":"Ellisian","m":0,"s":76,"desc":"Ellisian","img":"https://files.catbox.moe/3p9fwk.jpg"},
-    {"id":"harry","n":"Harry","t":"Chill guy","m":0,"s":75,"desc":"Chill guy","img":"https://files.catbox.moe/mtwbvz.jpg"}
+    {"id":"kordian","n":"Kordian","t":"Tuff Man","m":4,"s":93,"desc":"Tuff man","img":"https://files.catbox.moe/u1ouy0.png"},
+    {"id":"adam","n":"Adam","t":"Nice Guy","m":-2,"s":91,"desc":"Nice Guy","img":"https://files.catbox.moe/3aegtk.jpg"},
+    {"id":"sizu","n":"Sizu","t":"Classic Chad","m":-2,"s":89,"desc":"Classic Chad","img":"https://files.catbox.moe/t8x9cn.jpg"},
+    {"id":"alek","n":"Alek","t":"True Fouler","m":-2,"s":86,"desc":"True Fouler","img":"https://files.catbox.moe/5ptud2.jpg"},
+    {"id":"charlie","n":"Charlie","t":"Jonification Continuer","m":-1,"s":83,"desc":"Jonification Continuer","img":"https://files.catbox.moe/pr8rix.jpg"},
+    {"id":"ellis","n":"Ellis","t":"Ellisian","m":1,"s":78,"desc":"Ellisian","img":"https://files.catbox.moe/3p9fwk.jpg"},
+    {"id":"harry","n":"Harry","t":"Chill guy","m":1,"s":77,"desc":"Chill guy","img":"https://files.catbox.moe/mtwbvz.jpg"},
+    {"id":"samuel","n":"Samuel","t":"Shamus The Third","m":-2,"s":70,"desc":"Shamus The Third","img":"https://files.catbox.moe/kzh3l8.jpg"}
   ],
   "news":[
+    {"h":"NEW LEADERBOARD!","b":"Biggest changes: Kordian (+9), Ethan (+8), Dean (+7 ; went down a lil), and lastly Samuel got nerfed (-3) 💀","img":"https://files.catbox.moe/iy64ye.mp4","d":"2026-10-24"},
     {"h":"DEAN LOCKED IN?!","b":"Dean recently brutally mogged Toby and is now the currrent true adam","img":"https://files.catbox.moe/6wrfe5.png","d":"2026-10-23"}
   ],
   "poll":{"id":"p1","q":"Is this contender a Chad? Cast your verdict on each one."}
@@ -151,11 +152,18 @@ const PATHS={
 };
 const icon=(name,size=16)=>`<svg class="ico" width="${size}" height="${size}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${PATHS[name]||''}</svg>`;
 
+/* Media: videos (mp4/webm/etc.) render as <video>, everything else as <img>. */
+const isVideo=u=>/\.(mp4|webm|mov|m4v|ogv)(\?.*)?$/i.test(u||'');
+const mediaHTML=u=>!u?'':isVideo(u)
+  ?`<video src="${esc(u)}" autoplay muted loop playsinline controls preload="metadata" onerror="this.remove()"></video>`
+  :`<img src="${esc(u)}" alt="" onerror="this.remove()">`;
+
 /* Image preloading: every image is fetched once before the site shows,
-   and the Image objects are kept so the browser cache holds them. */
+   and the Image objects are kept so the browser cache holds them.
+   Videos are skipped. */
 const imgCache=new Map();
 function preload(urls){
-  return Promise.all([...new Set(urls.filter(Boolean))].filter(u=>!imgCache.has(u)).map(u=>new Promise(res=>{
+  return Promise.all([...new Set(urls.filter(u=>u&&!isVideo(u)))].filter(u=>!imgCache.has(u)).map(u=>new Promise(res=>{
     const im=new Image();
     imgCache.set(u,im);
     im.onload=()=>(im.decode?im.decode().catch(()=>{}):Promise.resolve()).then(res);
@@ -189,7 +197,7 @@ function rankingsView(){
 const newsView=()=>`<h1>News</h1><p class="sub">Latest from the association.</p>`+
   S.news.map(n=>`<article class="news-card">
     <div class="muted">${esc(n.d)}</div><h2>${esc(n.h)}</h2><p>${esc(n.b)}</p>
-    ${n.img?`<img src="${esc(n.img)}" alt="" onerror="this.remove()">`:''}</article>`).join('');
+    ${mediaHTML(n.img)}</article>`).join('');
 
 function profileView(id){
   const i=S.board.findIndex(p=>p.id===id);
@@ -348,7 +356,7 @@ const editBoard=()=>openDialog(`
 const newsRow=n=>`<div class="editor-card">
   <input placeholder="Headline" value="${esc(n.h)}">
   <textarea rows="3" placeholder="Body">${esc(n.b)}</textarea>
-  <input placeholder="Image URL (optional)" value="${esc(n.img)}">
+  <input placeholder="Image or video URL (optional)" value="${esc(n.img)}">
   <input placeholder="Date" value="${esc(n.d)}">
   <button class="ghost" onclick="this.closest('.editor-card').remove()">${icon('x',14)} Delete</button>
 </div>`;
