@@ -81,7 +81,7 @@ label{display:block;color:var(--muted);font-size:12px;margin:12px 0 4px}
 .grid2{display:grid;grid-template-columns:1fr 1fr;gap:6px}
 .grid3{display:grid;grid-template-columns:90px 90px 1fr;gap:6px}
 .editor-foot{display:flex;justify-content:space-between;align-items:center}
-.dialog-actions{display:flex;gap:8px;justify-content:flex-end;margin-top:18px}
+.dialog-actions{position:sticky;bottom:0;display:flex;gap:8px;justify-content:flex-end;margin:18px -22px -22px;padding:14px 22px;background:var(--surf);border-top:1px solid var(--line)}
 footer{text-align:center;color:var(--muted);font-size:12px;padding:30px}
 @media(max-width:640px){.grid3{grid-template-columns:1fr 1fr}.grid3 input:last-child{grid-column:1/-1}}
 @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}.spin{animation:spin 2s linear infinite!important}}
@@ -121,7 +121,7 @@ footer{text-align:center;color:var(--muted);font-size:12px;padding:30px}
     {"id":"samuel","n":"Samuel","t":"Shamus The Third","m":-2,"s":70,"desc":"Shamus The Third","img":"https://files.catbox.moe/kzh3l8.jpg"}
   ],
   "news":[
-    {"h":"NEW LEADERBOARD!","b":"Biggest changes: Kordian (+9), Ethan (+8), Dean (+7 ; went down a lil), and lastly Samuel got nerfed (-3) 💀","img":"https://files.catbox.moe/iy64ye.mp4","d":"2026-10-24"},
+    {"h":"New Leaderboard","b":"Biggest changes: Kordian (+9), Ethan (+8), Dean (+7 ; went down a lil), and lastly Samuel got nerfed (-3) 💀","img":"https://files.catbox.moe/6wrfe5.png","d":"2026-10-24"},
     {"h":"DEAN LOCKED IN?!","b":"Dean recently brutally mogged Toby and is now the currrent true adam","img":"https://files.catbox.moe/6wrfe5.png","d":"2026-10-23"}
   ],
   "poll":{"id":"p1","q":"Is this contender a Chad? Cast your verdict on each one."}
@@ -381,7 +381,16 @@ const editVote=()=>openDialog(`
   <label style="display:flex;gap:8px;align-items:center;margin-top:14px">
     <input type="checkbox" id="pollReset" style="width:auto"> Reset votes and points (new poll)
   </label>`,
-  ()=>{S.poll={id:$('#pollReset').checked?'p'+Date.now():S.poll.id,q:$('#pollQ').value}});
+  ()=>{const reset=$('#pollReset').checked;S.poll={id:reset?'p'+Date.now():S.poll.id,q:$('#pollQ').value};if(reset)T={}});
+
+function resetVotes(){
+  if(!confirm('Reset ALL votes and points to zero? Click "Export site" afterwards and upload the file to make it live.'))return;
+  S.poll={id:'p'+Date.now(),q:S.poll.q};
+  T={};
+  saveDraft();
+  route();
+  alert('Votes reset. Now click "Export site" and upload the downloaded file.');
+}
 
 function exportSite(){
   const clone=document.documentElement.cloneNode(true);
@@ -401,14 +410,19 @@ async function sha256(s){
 }
 
 async function initAdmin(){
-  if(S.passHash){
+  const known=[S.passHash,localStorage.getItem('hcr_pass')].filter(Boolean);
+  if(known.length){
     const pass=prompt('Admin passcode');
-    if(!pass||(await sha256(pass))!==S.passHash)return;
+    if(!pass)return;
+    const h=await sha256(pass);
+    if(!known.includes(h)){alert('Wrong passcode.');return}
+    S.passHash=h;
   }else{
     const pass=prompt('First run: set an admin passcode');
     if(!pass)return;
     S.passHash=await sha256(pass);
   }
+  localStorage.setItem('hcr_pass',S.passHash);
   const draft=localStorage.getItem('hcr_draft');
   if(draft){
     try{const d=JSON.parse(draft);d.passHash=S.passHash;S=d;normalise()}
@@ -420,6 +434,7 @@ async function initAdmin(){
     <button onclick="editBoard()">Leaderboard</button>
     <button onclick="editNews()">News</button>
     <button onclick="editVote()">Vote</button>
+    <button class="ghost" onclick="resetVotes()">Reset votes</button>
     <button class="ghost" onclick="exportSite()">${icon('download')} Export site</button>`;
   preload(allImages());
   route();
